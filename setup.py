@@ -87,7 +87,7 @@ def requirements_yaml():
                         reqs[curr].append(r)
 
     return (reqs, {x[len(EXTRA):]: vals
-                     for x, vals in reqs.items() if x.startswith(EXTRA)})
+                     for x, vals in list(reqs.items()) if x.startswith(EXTRA)})
 
 
 class PipInstallCommand(install, object):
@@ -130,7 +130,7 @@ def package_files(directory, prefix=".."):
 
 
 if sys.argv[1:] and sys.argv[1] == "--release-name":
-    print(PKG_INFO["release_name"])
+    print((PKG_INFO["release_name"]))
     sys.exit(0)
 else:
     # The extra command line options we added cause warnings, quell that.

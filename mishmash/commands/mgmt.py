@@ -24,17 +24,17 @@ class SplitArtists(Command):
 
     def _displayArtistMusic(self, artist, albums, singles):
         if albums:
-            print(u"%d albums by %s:" % (len(albums),
-                                         Style.bright(Fg.blue(artist.name))))
+            print(("%d albums by %s:" % (len(albums),
+                                         Style.bright(Fg.blue(artist.name)))))
             for alb in albums:
-                print(u"%s %s" % (str(alb.getBestDate()).center(17),
-                                  alb.title))
+                print(("%s %s" % (str(alb.getBestDate()).center(17),
+                                  alb.title)))
 
         if singles:
-            print(u"%d single tracks by %s" %
-                  (len(singles), Style.bright(Fg.blue(artist.name))))
+            print(("%d single tracks by %s" %
+                  (len(singles), Style.bright(Fg.blue(artist.name)))))
             for s in singles:
-                print(u"\t%s" % (s.title))
+                print(("\t%s" % (s.title)))
 
     def _run(self):
         session = self.db_session
@@ -42,7 +42,7 @@ class SplitArtists(Command):
         artists = session.query(Artist)\
                          .filter(Artist.name == self.args.artist).all()
         if not artists:
-            print(u"Artist not found: %s" % self.args.artist)
+            print(("Artist not found: %s" % self.args.artist))
             return 1
         elif len(artists) > 1:
             artist = selectArtist(Fg.blue("Select which '%s' to split...") %
@@ -57,8 +57,8 @@ class SplitArtists(Command):
         singles = artist.getTrackSingles()
 
         if len(albums) < 2 and len(singles) < 2:
-            print("%d albums and %d singles found for '%s', nothing to do." %
-                    (len(albums), len(singles), artist.name))
+            print(("%d albums and %d singles found for '%s', nothing to do." %
+                    (len(albums), len(singles), artist.name)))
             return 0
 
         self._displayArtistMusic(artist, albums, singles)
@@ -69,7 +69,7 @@ class SplitArtists(Command):
                    validate=_validN)
         new_artists = []
         for i in range(1, n + 1):
-            print(Style.bright(u"\n%s #%d") % (Fg.blue(artist.name), i))
+            print((Style.bright("\n%s #%d") % (Fg.blue(artist.name), i)))
 
             # Reuse original artist for first
             a = artist if i == 1 else Artist(name=artist.name,
@@ -82,7 +82,7 @@ class SplitArtists(Command):
             new_artists.append(a)
 
         if not Artist.checkUnique(new_artists):
-            print(Fg.red("Artists must be unique."))
+            print((Fg.red("Artists must be unique.")))
             return 1
 
         for a in new_artists:
@@ -91,19 +91,19 @@ class SplitArtists(Command):
         # New Artist objects need IDs
         session.flush()
 
-        print(Style.bright("\nAssign albums to the correct artist."))
+        print((Style.bright("\nAssign albums to the correct artist.")))
         for i, a in enumerate(new_artists):
-            print("Enter %s%d%s for %s from %s%s%s" %
+            print(("Enter %s%d%s for %s from %s%s%s" %
                   (Style.BRIGHT, i + 1, Style.RESET_BRIGHT,
                   a.name,
                   Style.BRIGHT, a.origin(country_code="iso3c",
                                          title_case=False),
-                  Style.RESET_BRIGHT))
+                  Style.RESET_BRIGHT)))
 
         # prompt for correct artists
         def _promptForArtist(_text):
             a = prompt(_text, type_=int,
-                       choices=range(1, len(new_artists) + 1))
+                       choices=list(range(1, len(new_artists) + 1)))
             return new_artists[a - 1]
 
         print("")
@@ -153,7 +153,7 @@ class MergeArtists(Command):
         if len(merge_list) > 1:
             # Reuse lowest id
             artist_ids = {a.id: a for a in merge_list}
-            min_id = min(*artist_ids.keys())
+            min_id = min(*list(artist_ids.keys()))
             artist = artist_ids[min_id]
 
             mc = mostCommonItem
@@ -165,9 +165,9 @@ class MergeArtists(Command):
                     default_country=mc([a.origin_country for a in merge_list]),
                     artist=artist)
         else:
-            print("Nothing to do, %s" %
+            print(("Nothing to do, %s" %
                     ("artist not found" if not len(merge_list)
-                                        else "only one artist found"))
+                                        else "only one artist found")))
             return 1
 
         assert(new_artist in merge_list)

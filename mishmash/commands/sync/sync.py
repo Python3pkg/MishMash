@@ -38,8 +38,8 @@ class SyncPlugin(LoaderPlugin):
     """An eyeD3 file scanner/loader plugin."""
 
     NAMES = ['mishmash-sync']
-    SUMMARY = u"Synchronize files/directories with a Mishmash database."
-    DESCRIPTION = u""
+    SUMMARY = "Synchronize files/directories with a Mishmash database."
+    DESCRIPTION = ""
 
     def __init__(self, arg_parser):
         """Constructor"""
@@ -481,7 +481,7 @@ class Sync(Command):
                         sync_libs[lib] = set()
                     sync_libs[lib].add(path)
 
-                for lib, paths in sync_libs.items():
+                for lib, paths in list(sync_libs.items()):
                     result = _syncLib(MusicLibrary(lib, paths=paths))
                     if result != 0:
                         return result

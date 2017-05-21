@@ -42,7 +42,7 @@ class Monitor(multiprocessing.Process):
                 while not dir_queue.empty():
                     lib, path = dir_queue.get()
 
-                    watched = (path in set(chain(*self._watched_dirs.values())))
+                    watched = (path in set(chain(*list(self._watched_dirs.values()))))
 
                     if lib not in self._watched_dirs:
                         self._watched_dirs[lib] = set()
@@ -52,11 +52,11 @@ class Monitor(multiprocessing.Process):
                         self._inotify.add_watch(
                             str(path).encode(LOCAL_FS_ENCODING),
                             self._inotify_mask)
-                        print("Watching {} (lib: {})".format(path, lib))
+                        print(("Watching {} (lib: {})".format(path, lib)))
                         num_dirs += 1
 
-                    print("Monitoring {:d} director{} for file changes"
-                          .format(num_dirs, "y" if num_dirs == 1 else "ies"))
+                    print(("Monitoring {:d} director{} for file changes"
+                          .format(num_dirs, "y" if num_dirs == 1 else "ies")))
 
                 # Process Inotify
                 for event in self._inotify.event_gen():
@@ -70,10 +70,10 @@ class Monitor(multiprocessing.Process):
                     watch_path = Path(str(watch_path, LOCAL_FS_ENCODING))
                     filename = Path(str(filename, LOCAL_FS_ENCODING))
 
-                    print("WD=({:d}) MASK=({:d}) "
+                    print(("WD=({:d}) MASK=({:d}) "
                           "MASK->NAMES={} WATCH-PATH={} FILENAME={}"
                           .format(header.wd, header.mask,
-                                  type_names, watch_path, filename))
+                                  type_names, watch_path, filename)))
 
                     if header.mask & (IN_ATTRIB | IN_CREATE | IN_DELETE |
                                       IN_MODIFY | IN_MOVED_TO | IN_MOVED_FROM):
@@ -88,7 +88,7 @@ class Monitor(multiprocessing.Process):
                 def _reqSync(l, d):
                     if d.exists():
                         sync_queue.put((lib, d))
-                        print("Requesting sync {} (lib: {})" .format(d, l))
+                        print(("Requesting sync {} (lib: {})" .format(d, l)))
 
                 if time() > next_sync_t:
                     for d in sync_dirs:
@@ -108,7 +108,7 @@ class Monitor(multiprocessing.Process):
         except KeyboardInterrupt:
             pass
         finally:
-            for path in set(chain(*self._watched_dirs.values())):
+            for path in set(chain(*list(self._watched_dirs.values()))):
                 self._inotify.remove_watch(str(path).encode(LOCAL_FS_ENCODING))
 
     @property

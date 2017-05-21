@@ -1,8 +1,8 @@
 from pathlib import Path
 from collections import namedtuple
 import nicfit
-import alembic
-import alembic.config
+from . import alembic
+from . import alembic.config
 from nicfit.util import cd
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -66,16 +66,16 @@ def dropAll(url):
 
 def search(session, query):
     # FIXME
-    flat_query = u"".join(query.split())
+    flat_query = "".join(query.split())
 
     artists = session.query(Artist).filter(
-            or_(Artist.name.ilike(u"%%%s%%" % query),
-                Artist.name.ilike(u"%%%s%%" % flat_query))
+            or_(Artist.name.ilike("%%%s%%" % query),
+                Artist.name.ilike("%%%s%%" % flat_query))
                ).all()
     albums = session.query(Album).filter(
-            Album.title.ilike(u"%%%s%%" % query)).all()
+            Album.title.ilike("%%%s%%" % query)).all()
     tracks = session.query(Track).filter(
-            Track.title.ilike(u"%%%s%%" % query)).all()
+            Track.title.ilike("%%%s%%" % query)).all()
 
     return dict(artists=artists,
                 albums=albums,

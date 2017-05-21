@@ -54,8 +54,8 @@ def home_view(request):
 @view_config(route_name="all_artists", renderer="templates/artists.pt",
              layout="main-layout")
 def allArtistsView(request):
-    NUMBER = u"#"
-    OTHER = u"Other"
+    NUMBER = "#"
+    OTHER = "Other"
 
     buckets = set()
     artist_dict = {}

@@ -16,16 +16,16 @@ def selectArtist(heading, choices=None, multiselect=False, allow_create=True):
         if choices:
             name = choices[0].name
             for menu_num, a in enumerate(choices):
-                print("   %d) %s" % (menu_num + 1, a.origin()))
+                print(("   %d) %s" % (menu_num + 1, a.origin())))
             menu_num += 1
 
             if not multiselect:
                 if allow_create:
                     menu_num += 1
-                    print("   %d) Enter a new artist" % menu_num)
+                    print(("   %d) Enter a new artist" % menu_num))
 
                 choice = prompt("Which artist", type_=int,
-                                choices=range(1, menu_num + 1))
+                                choices=list(range(1, menu_num + 1)))
                 choice -= 1
                 if choice < len(choices):
                     artist = choices[choice]
@@ -51,7 +51,7 @@ def selectArtist(heading, choices=None, multiselect=False, allow_create=True):
             artist = promptArtist(None, name=name)
             if choices:
                 if not Artist.checkUnique(choices + [artist]):
-                    print(Fg.red("Artist entered is not unique, try again..."))
+                    print((Fg.red("Artist entered is not unique, try again...")))
                     artist = None
 
     assert(artist)

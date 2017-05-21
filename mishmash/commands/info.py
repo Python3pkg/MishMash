@@ -32,11 +32,11 @@ class Info(Command):
             k_width = max([len(k) for k, v in _olist if k])
             for k, v in _olist:
                 if k:
-                    print(_format.format(k=k.ljust(k_width), v=v))
+                    print((_format.format(k=k.ljust(k_width), v=v)))
             _olist.clear()
 
         logo = figlet_format("``MishMash``", font="graffiti")
-        print(Fg.green(logo, Style.BRIGHT))
+        print((Fg.green(logo, Style.BRIGHT)))
 
         def mkkey(k):
             return Style.bright(Fg.blue(str(k)))
@@ -66,7 +66,7 @@ class Info(Command):
         print("")
         for lib in session.query(Library)\
                           .filter(Library.id > NULL_LIB_ID).all():
-            print(Fg.yellow("\n=== {} library ===").format(lib.name))
+            print((Fg.yellow("\n=== {} library ===").format(lib.name)))
             _addOutput(None, None)
             for name, orm_type in [("tracks", Track), ("artists", Artist),
                                   ("albums", Album), ("tags", Tag),

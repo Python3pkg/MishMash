@@ -17,7 +17,7 @@ from .commands import *                                                   # noqa
 
 
 def _pErr(msg):
-    print(ansi.Fg.red(str(msg) + ":"))
+    print((ansi.Fg.red(str(msg) + ":")))
     tb = sys.exc_info()
     traceback.print_exception(tb[0], tb[1], tb[2])
 
